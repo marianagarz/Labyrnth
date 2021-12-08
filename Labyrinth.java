@@ -1,4 +1,4 @@
-/*
+*
 * Labyrinth.java is part of the Backtracking project in
 * the recursion unit of Advanced CS at Friends School of Baltimore.
 *
