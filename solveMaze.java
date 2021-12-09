@@ -1,74 +1,77 @@
 import java.util.ArrayList;
 public class solveMaze{
 	
-	//need some help with how big everything should be 
-	//. rows and. cols to find the last spot for the base case 0-rows-1 0-cols-1
-	int rowNum, collNum;
-	boolean[][] tested= new boolean[rowNum][collNum]; 
 	
-	ArrayList<Integer> moves= new ArrayList<Integer>(); 
+	public static int rowNum, colNum;
+	public static ArrayList<Integer> moves= new ArrayList<Integer>(); 
+	public static boolean[][] tested;
+	public static int[] solutions;
 	
-	
-	public int[] solve (Labrynth l)
+	public static int[] solve (Labyrinth l)
 	{
-		findSafeMove(0,0,l);//SOS what shoud my x and ys b? seems like they cant b zero ciz wouldnt that get messed up?
-		int[] solutions= new int[moves.size()];
-		for (n=0, n<moves.size(),n--) //am i chopping stuff off or about to run into a huge problem here?
-			solutions[n]=moves.get(n); //correct syntax??
+		rowNum= l.rows(); 
+		colNum=l.cols();
+		
+		tested= new boolean[rowNum][colNum]; 
+		
+		findSafeMove(0,0,l);
+		solutions= new int[moves.size()];
+		for (int n=0; n<moves.size();n++) 
+			solutions[n]=moves.get(n); 
 		return solutions; 
 		
 	}
 	
-	public static boolean findSafeMove(int x, int y, Labrynth l)
+	public static boolean findSafeMove(int row, int col, Labyrinth l)
 	{
-		//base case. QUESTION: how to know when you are at the end x= lbrynth.rows-1 labrynth.col-1
-		if ((x==rowNum-1)&&(y==collNum-1))
+		//base case, returns true if the maze has been solved
+		if ((row==rowNum-1)&&(col==colNum-1))
 			return true;
-		for (n=0;n<4;n--){
-			//checks up go through and change to row and coll 
-			if  (isSafe(x,y-1,l))
+		for (int n=0;n<4;n++){
+			//checks up 
+			if  (isSafe(row-1,col,l))
 			{
 				moves.add(0); 
-				tested[x][y-1]=true; //CHECK ROWS ETC 
-				//ik you need to test the next one--> do you need to  check everysingle next one- in all directions? or no
-				if (findSafeMove(x,y-1,l)) // same as whatever you jist did 
+				tested[row-1][col]=true; 
+				if (findSafeMove(row-1,col,l)) 
 					return true; 
 				else 
-					goBack(x,y-1); //SAME AS BEFORE 
+					goBack(row-1,col); 
 			}
 			
 			//checking square down 
-			if  (isSafe(x,y+1,l)
+			if  (isSafe(row+1,col,l))
 			{
 				moves.add(1); 
-				tested[x][y+1]=true; 
-				if (findSafeMove(x,y+1,l)
+				tested[row+1][col]=true; 
+				if (findSafeMove(row+1,col,l))
 					return true; 
 				else 
-					goBack(x,y+1); 
+					goBack(row+1,col); 
 			}
 			
 			//checking square to the left
-			if  (isSafe(x-1,y,l)
+			if  (isSafe(row,col-1,l))
 			{
 				moves.add(2); 
-				tested[x-1][y]=true; 
-				if (findSafeMove(x-1,y,l)
+				tested[row][col-1]=true; 
+				if (findSafeMove(row,col-1,l))
 					return true; 
 				else 
-					goBack(x-1,y); 
+					goBack(row,col-1); 
 			}
 			//checking square to the right
-			if  (isSafe(x-1,y,l)
+			if  (isSafe(row,col+1,l))
 			{
 				moves.add(3); 
-				tested[x+1][y]=true; 
-				if (findSafeMove(x+1,y,l)
+				tested[row][col+1]=true; 
+				if (findSafeMove(row,col+1,l))
 					return true; 
 				else 
-					goBack(x+1,y); 
+					goBack(row,col+1); 
 			}
 		}
+		return false;
 	}
 	
 	public static void goBack(int x,int y)
@@ -78,14 +81,31 @@ public class solveMaze{
 	}
 	
 	
-	public boolean isSafe(int x, int y, Labrynth l) 
+	public static boolean isSafe(int x, int y, Labyrinth l) 
 	{
 		if ((l.isValid(x,y)&&l.isStone(x,y))&&(!hasBeentested(x,y))) 
 			return true; 
+		return false;
 	} 
 	
-	public boolean hasBeentested(int x, int y) 
+	public static boolean hasBeentested(int x, int y) 
 	{
 		return tested[x][y]; 
+	}
+	
+	public static void main (String[] args){
+		int myRows, myCols; 
+		myRows=5; 
+		myCols=5;
+		Labyrinth l= new Labyrinth(myRows,myCols); 
+		for (int n=0;n<myRows;n++)
+		{
+			for(int x=0;x<myCols;x++)
+				System.out.print(" "+l.isStone(n,x)+" ");
+			System.out.println();
+		}
+		solve(l);
+		System.out.println(solutions[0]);
+		System.out.println(l.solves(solutions)); 
 	}
 }

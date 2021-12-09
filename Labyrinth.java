@@ -1,4 +1,4 @@
-*
+/**
 * Labyrinth.java is part of the Backtracking project in
 * the recursion unit of Advanced CS at Friends School of Baltimore.
 *
@@ -109,6 +109,17 @@ public class Labyrinth {
         
         build();
     }
+	
+	//IM SORRY i couldn't find a getter in your code so I just added them, I hope this doesn't colossally mess things up
+	public int rows()
+	{
+		return rows;
+	}
+	
+	public int cols()
+	{
+		return cols; 
+	}
     
     //Constructs the labyrinth
     private void build() {
